@@ -328,6 +328,11 @@
         #country-code {
             width: 140px;
             padding-right: 32px !important;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><polygon points="0,0 12,0 6,12" fill="%23C9A227"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            appearance: none;
         }
 
         .contacts {
@@ -515,26 +520,33 @@
         const phoneInput = document.getElementById('phone');
 
         const phonePatterns = {
-            '+7':   { mask: '+7 (___) ___-__-__',   digitsAfterCode: 10 },
-            '+375': { mask: '+375 (__) ___-__-__',  digitsAfterCode: 9  }
+            '+7':   { mask: '(___) ___-__-__', digitsAfterCode: 10 },
+            '+375': { mask: '(__) ___-__-__',  digitsAfterCode: 9  }
         };
 
         let currentCode = countrySelect.value;
         let currentPattern = phonePatterns[currentCode];
 
-        function formatPhone(value, pattern) {
+        function formatPhone(value, code, pattern) {
             let digits = value.replace(/\D/g, '');
-            if (digits.startsWith(currentCode.replace('+', ''))) {
-                digits = digits.slice(currentCode.length - 1);
+            const codeDigits = code.replace('+', '');
+
+            // Удаляем код страны из начала цифр, если он там
+            if (digits.startsWith(codeDigits)) {
+                digits = digits.slice(codeDigits.length);
             }
-            let formatted = currentCode + ' ';
+
+            // Ограничиваем количество цифр
+            digits = digits.slice(0, pattern.digitsAfterCode);
+
+            // Формируем строку
+            let formatted = code;
             let i = 0;
 
             for (let char of pattern.mask) {
                 if (i >= digits.length) break;
                 if (char === '_') {
-                    formatted += digits[i];
-                    i++;
+                    formatted += digits[i++];
                 } else {
                     formatted += char;
                 }
@@ -547,35 +559,27 @@
             currentCode = countrySelect.value;
             currentPattern = phonePatterns[currentCode];
 
-            phoneInput.placeholder = currentPattern.mask;
+            phoneInput.placeholder = currentCode + ' ' + currentPattern.mask;
 
-            // Сохраняем только цифры после кода
-            let currentDigits = phoneInput.value.replace(/\D/g, '');
-            if (currentDigits.startsWith(currentCode.replace('+', ''))) {
-                currentDigits = currentDigits.slice(currentCode.length - 1);
-            }
-
-            // Ограничиваем длину
-            currentDigits = currentDigits.slice(0, currentPattern.digitsAfterCode);
-
-            phoneInput.value = formatPhone(currentDigits, currentPattern);
+            // Переформатируем текущее значение
+            phoneInput.value = formatPhone(phoneInput.value, currentCode, currentPattern);
         }
 
         countrySelect.addEventListener('change', updateMask);
 
         phoneInput.addEventListener('input', function(e) {
-            let value = this.value;
-            this.value = formatPhone(value, currentPattern);
+            this.value = formatPhone(this.value, currentCode, currentPattern);
         });
 
         phoneInput.addEventListener('focus', function() {
-            if (!this.value.trim()) {
-                this.value = currentCode + ' ';
+            if (this.value === '') {
+                this.value = currentCode;
             }
         });
 
         phoneInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Backspace' && this.value === currentCode + ' ') {
+            const codeDigitsLength = currentCode.replace('+', '').length;
+            if (e.key === 'Backspace' && this.selectionStart <= currentCode.length && this.value.length <= currentCode.length) {
                 e.preventDefault();
             }
         });
