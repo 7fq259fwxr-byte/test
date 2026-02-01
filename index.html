@@ -408,10 +408,26 @@
     <section id="contact" class="fade-in-section">
         <div class="container">
             <h2>Оставьте заявку</h2>
-            <form>
-                <input type="text" placeholder="Ваше имя" required>
-                <input type="tel" placeholder="Телефон" required>
-                <textarea rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
+            <form action="https://formsubmit.co/nikitulkaah@gmail.com" method="POST">
+                <input type="text" name="Имя" placeholder="Ваше имя" required>
+                <input type="tel" name="Телефон" placeholder="Телефон" required>
+                <textarea name="Сообщение" rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
+
+                <!-- Тема письма -->
+                <input type="hidden" name="_subject" value="Новая заявка с сайта Luxury Hair Extensions">
+
+                <!-- Автоответ клиенту -->
+                <input type="hidden" name="_autoresponse" value="Спасибо! Мы получили вашу заявку и свяжемся в ближайшее время (обычно в течение 1–2 часов).">
+
+                <!-- Отключить капчу (чтобы не было лишней страницы) -->
+                <input type="hidden" name="_captcha" value="false">
+
+                <!-- Защита от ботов (скрытое поле) -->
+                <input type="text" name="_gotcha" style="display:none !important">
+
+                <!-- После отправки можно перенаправить на страницу благодарности -->
+                <!-- <input type="hidden" name="_next" value="https://твой-домен/thanks.html"> -->
+
                 <button type="submit">Отправить заявку</button>
             </form>
 
