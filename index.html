@@ -242,7 +242,7 @@
         /* Contact */
         form {
             max-width: 680px;
-            margin: 0 auto 60px;
+            margin: 0 auto 40px;
             display: flex;
             flex-direction: column;
             gap: 24px;
@@ -283,6 +283,33 @@
             background: #C9A227;
             color: #0f0f0f;
             transform: translateY(-3px);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #form-message {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 500;
+            padding: 16px;
+            border-radius: 12px;
+            min-height: 60px;
+            transition: all 0.4s ease;
+        }
+
+        #form-message.success {
+            background: rgba(201, 162, 39, 0.12);
+            color: #C9A227;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+        }
+
+        #form-message.error {
+            background: rgba(255, 107, 107, 0.12);
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.3);
         }
 
         .contacts {
@@ -408,21 +435,20 @@
     <section id="contact" class="fade-in-section">
         <div class="container">
             <h2>Оставьте заявку</h2>
-            <form action="https://formsubmit.co/nikitulkaah@gmail.com" method="POST">
-    <input type="text" name="Имя" placeholder="Ваше имя" required>
-    <input type="tel" name="Телефон" placeholder="Телефон" required>
-    <textarea name="Сообщение" rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
+            <form id="contact-form" action="https://formsubmit.co/your.email@gmail.com" method="POST">
+                <input type="text" name="Имя" placeholder="Ваше имя" required>
+                <input type="tel" name="Телефон" placeholder="Телефон" required>
+                <textarea name="Сообщение" rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
 
-    <input type="hidden" name="_subject" value="Новая заявка с сайта Luxury Hair Extensions">
-    <input type="hidden" name="_autoresponse" value="Спасибо! Мы получили вашу заявку и свяжемся в ближайшее время (обычно в течение 1–2 часов).">
-    <input type="hidden" name="_captcha" value="false">
-    <input type="text" name="_gotcha" style="display:none !important">
+                <input type="hidden" name="_subject" value="Новая заявка с сайта Luxury Hair Extensions">
+                <input type="hidden" name="_autoresponse" value="Спасибо! Мы получили вашу заявку и свяжемся в ближайшее время (обычно в течение 1–2 часов).">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="text" name="_gotcha" style="display:none !important">
 
-    <!-- Вот это поле убирает их страницу Thanks! -->
-    <input type="hidden" name="_next" value="https://7fq259fwxr-byte.github.io/test/">
-
-    <button type="submit">Отправить заявку</button>
+                <button type="submit" id="submit-btn">Отправить заявку</button>
             </form>
+
+            <div id="form-message"></div>
 
             <div class="contacts">
                 <p>Телефон: +31 6 123 45 678</p>
@@ -453,9 +479,45 @@
 
         fadeSections.forEach(section => observer.observe(section));
 
-        // Hero при загрузке
         window.addEventListener('load', () => {
             document.querySelector('.hero-content').classList.add('is-visible');
+        });
+
+        // AJAX отправка формы
+        const form = document.getElementById('contact-form');
+        const messageBox = document.getElementById('form-message');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Отключаем кнопку на время отправки
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Отправка...';
+            messageBox.textContent = '';
+            messageBox.className = '';
+
+            try {
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                });
+
+                if (response.ok) {
+                    messageBox.textContent = 'Спасибо! Заявка успешно отправлена. Мы свяжемся с вами в ближайшее время ✨';
+                    messageBox.className = 'success';
+                    form.reset(); // очищаем поля
+                } else {
+                    messageBox.textContent = 'Не удалось отправить заявку. Попробуйте позже или напишите нам в Instagram.';
+                    messageBox.className = 'error';
+                }
+            } catch (err) {
+                messageBox.textContent = 'Ошибка соединения. Проверьте интернет и попробуйте снова.';
+                messageBox.className = 'error';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Отправить заявку';
+            }
         });
     </script>
 
