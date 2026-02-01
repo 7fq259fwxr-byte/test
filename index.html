@@ -319,6 +319,17 @@
             border: 1px solid rgba(255, 107, 107, 0.3);
         }
 
+        .phone-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        #country-code {
+            width: 140px;
+            padding-right: 32px !important;
+        }
+
         .contacts {
             text-align: center;
             font-size: 1.1rem;
@@ -339,26 +350,15 @@
         }
 
         @media (max-width: 960px) {
-            #about {
-                grid-template-columns: 1fr;
-                gap: 60px;
-            }
-
-            section {
-                padding: 100px 0;
-            }
+            #about { grid-template-columns: 1fr; gap: 60px; }
+            section { padding: 100px 0; }
         }
 
         @media (max-width: 640px) {
             #hero h1 { font-size: 2.8rem; }
             #hero p  { font-size: 1.3rem; }
-            .phone-wrapper {
-                flex-direction: column;
-                gap: 16px;
-            }
-            #country-code {
-                width: 100%;
-            }
+            .phone-wrapper { flex-direction: column; gap: 16px; }
+            #country-code { width: 100%; }
         }
     </style>
 </head>
@@ -452,7 +452,7 @@
             <form id="contact-form" action="https://formsubmit.co/nikitulkaah@gmail.com" method="POST">
                 <input type="text" name="Имя" placeholder="Ваше имя" required>
 
-                <div class="phone-wrapper" style="display: flex; gap: 12px; align-items: stretch;">
+                <div class="phone-wrapper">
                     <select id="country-code" name="Код_страны" required>
                         <option value="+7" selected>Россия +7</option>
                         <option value="+375">Беларусь +375</option>
@@ -463,8 +463,7 @@
                         id="phone" 
                         name="Телефон" 
                         placeholder="+7 (___) ___-__-__" 
-                        required 
-                        style="flex: 1;"
+                        required
                     >
                 </div>
 
@@ -494,7 +493,6 @@
     <script>
         // Появление секций при скролле
         const fadeSections = document.querySelectorAll('.fade-in-section');
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -510,61 +508,84 @@
             document.querySelector('.hero-content').classList.add('is-visible');
         });
 
-        // Маска телефона
+        // ────────────────────────────────────────────────
+        //                  МАСКА ТЕЛЕФОНА
+        // ────────────────────────────────────────────────
         const countrySelect = document.getElementById('country-code');
         const phoneInput = document.getElementById('phone');
 
-        const masks = {
-            '+7': '+7 (___) ___-__-__',
-            '+375': '+375 (__) ___-__-__'
+        const phonePatterns = {
+            '+7':   { mask: '+7 (___) ___-__-__',   digitsAfterCode: 10 },
+            '+375': { mask: '+375 (__) ___-__-__',  digitsAfterCode: 9  }
         };
 
-        const placeholders = {
-            '+7': '+7 (___) ___-__-__',
-            '+375': '+375 (__) ___-__-__'
-        };
+        let currentCode = countrySelect.value;
+        let currentPattern = phonePatterns[currentCode];
 
-        let currentMask = masks['+7'];
-        let currentPlaceholder = placeholders['+7'];
+        function formatPhone(value, pattern) {
+            let digits = value.replace(/\D/g, '');
+            if (digits.startsWith(currentCode.replace('+', ''))) {
+                digits = digits.slice(currentCode.length - 1);
+            }
+            let formatted = currentCode + ' ';
+            let i = 0;
 
-        function applyMask(input, mask) {
-            let value = input.value.replace(/\D/g, ''); // только цифры
-            let pos = 0;
-            let formatted = '';
-
-            for (let char of mask) {
-                if (char === '_' && pos < value.length) {
-                    formatted += value[pos++];
-                } else if (char !== '_') {
+            for (let char of pattern.mask) {
+                if (i >= digits.length) break;
+                if (char === '_') {
+                    formatted += digits[i];
+                    i++;
+                } else {
                     formatted += char;
                 }
             }
 
-            input.value = formatted;
+            return formatted;
         }
 
-        phoneInput.addEventListener('input', function() {
-            applyMask(this, currentMask);
+        function updateMask() {
+            currentCode = countrySelect.value;
+            currentPattern = phonePatterns[currentCode];
+
+            phoneInput.placeholder = currentPattern.mask;
+
+            // Сохраняем только цифры после кода
+            let currentDigits = phoneInput.value.replace(/\D/g, '');
+            if (currentDigits.startsWith(currentCode.replace('+', ''))) {
+                currentDigits = currentDigits.slice(currentCode.length - 1);
+            }
+
+            // Ограничиваем длину
+            currentDigits = currentDigits.slice(0, currentPattern.digitsAfterCode);
+
+            phoneInput.value = formatPhone(currentDigits, currentPattern);
+        }
+
+        countrySelect.addEventListener('change', updateMask);
+
+        phoneInput.addEventListener('input', function(e) {
+            let value = this.value;
+            this.value = formatPhone(value, currentPattern);
         });
 
-        countrySelect.addEventListener('change', function() {
-            const code = this.value;
-            currentMask = masks[code];
-            currentPlaceholder = placeholders[code];
+        phoneInput.addEventListener('focus', function() {
+            if (!this.value.trim()) {
+                this.value = currentCode + ' ';
+            }
+        });
 
-            phoneInput.placeholder = currentPlaceholder;
-
-            // Сохраняем только цифры из предыдущего значения и добавляем новый код
-            let digits = phoneInput.value.replace(/\D/g, '');
-            phoneInput.value = code + ' ';
-            applyMask(phoneInput, currentMask);
+        phoneInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Backspace' && this.value === currentCode + ' ') {
+                e.preventDefault();
+            }
         });
 
         // Инициализация
-        phoneInput.value = '+7 ';
-        phoneInput.placeholder = currentPlaceholder;
+        updateMask();
 
-        // AJAX отправка формы
+        // ────────────────────────────────────────────────
+        //                  ОТПРАВКА ФОРМЫ (AJAX)
+        // ────────────────────────────────────────────────
         const form = document.getElementById('contact-form');
         const messageBox = document.getElementById('form-message');
         const submitBtn = document.getElementById('submit-btn');
