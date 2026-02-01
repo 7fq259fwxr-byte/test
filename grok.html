@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Hair Extensions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Hero */
+        #hero {
+            height: 100vh;
+            min-height: 760px;
+            background: linear-gradient(rgba(15,15,15,0.72), rgba(15,15,15,0.48)),
+                        url('https://images.unsplash.com/photo-1591370871779-8b446a82e7db?auto=format&fit=crop&q=80&w=1974') center/cover no-repeat fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 920px;
+            padding: 0 20px;
+        }
+
+        #hero h1 {
+            font-size: clamp(3rem, 7vw, 5.2rem);
+            margin-bottom: 0.5em;
+            color: #fff;
+        }
+
+        #hero p {
+            font-size: clamp(1.25rem, 3vw, 1.7rem);
+            margin-bottom: 2.5rem;
+            color: #d0d0d0;
+            font-weight: 300;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 16px 48px;
+            background: transparent;
+            color: #C9A227;
+            font-weight: 500;
+            letter-spacing: 1px;
+            border: 1px solid #C9A227;
+            border-radius: 50px;
+            transition: all 0.45s ease;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            background: #C9A227;
+            color: #0f0f0f;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(201,162,39,0.35);
+        }
+
+        /* Sections */
+        section {
+            padding: 140px 0;
+        }
+
+        section h2 {
+            font-size: clamp(2.8rem, 5.5vw, 4.2rem);
+            text-align: center;
+            margin-bottom: 3.5rem;
+            color: #fff;
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(60px);
+            transition: opacity 1.1s ease-out, transform 1.1s ease-out;
+        }
+
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About */
+        #about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        #about img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+        }
+
+        #about p {
+            font-size: 1.15rem;
+            color: #ccc;
+        }
+
+        /* Services */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
+        }
+
+        .service-card {
+            background: #1a1a1a;
+            padding: 48px 32px;
+            border-radius: 16px;
+            border: 1px solid #2a2a2a;
+            transition: all 0.5s ease;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-16px);
+            border-color: #C9A227;
+            box-shadow: 0 30px 80px rgba(201,162,39,0.15);
+        }
+
+        .service-icon {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 28px;
+            background: transparent;
+            border: 1px solid #C9A227;
+            color: #C9A227;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.9rem;
+            font-weight: 600;
+            transition: all 0.5s ease;
+        }
+
+        .service-card:hover .service-icon {
+            background: #C9A227;
+            color: #0f0f0f;
+            transform: scale(1.12);
+        }
+
+        .service-card h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-grid img {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 12px;
+            transition: all 0.6s ease;
+            cursor: zoom-in;
+        }
+
+        .gallery-grid img:hover {
+            transform: scale(1.07);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.7);
+        }
+
+        /* Why us */
+        #why-us {
+            background: #000;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+        }
+
+        .why-block {
+            text-align: center;
+            padding: 30px 20px;
+            border: 1px solid #222;
+            border-radius: 16px;
+            transition: all 0.5s ease;
+        }
+
+        .why-block:hover {
+            border-color: #C9A227;
+            transform: translateY(-12px);
+        }
+
+        .why-icon {
+            font-size: 3.8rem;
+            margin-bottom: 1.4rem;
+            color: #C9A227;
+            font-weight: 600;
+            transition: transform 0.7s ease;
+        }
+
+        .why-block:hover .why-icon {
+            transform: scale(1.25);
+        }
+
+        /* Contact */
+        form {
+            max-width: 680px;
+            margin: 0 auto 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        input, textarea {
+            padding: 18px 24px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: #eee;
+            font-family: inherit;
+            font-size: 1.05rem;
+            transition: all 0.4s;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #C9A227;
+            box-shadow: 0 0 0 4px rgba(201,162,39,0.18);
+        }
+
+        button[type="submit"] {
+            padding: 18px;
+            background: transparent;
+            color: #C9A227;
+            border: 1px solid #C9A227;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.45s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button[type="submit"]:hover {
+            background: #C9A227;
+            color: #0f0f0f;
+            transform: translateY(-3px);
+        }
+
+        .contacts {
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .contacts a {
+            color: #C9A227;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 0 40px;
+            text-align: center;
+            background: #000;
+            color: #777;
+            font-size: 0.95rem;
+            border-top: 1px solid #222;
+        }
+
+        @media (max-width: 960px) {
+            #about {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+
+            section {
+                padding: 100px 0;
+            }
+        }
+
+        @media (max-width: 640px) {
+            #hero h1 { font-size: 2.8rem; }
+            #hero p  { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section id="hero">
+        <div class="hero-content fade-in-section">
+            <h1>Luxury Hair Extensions<br>— Natural Look & Perfect Length</h1>
+            <p>Премиальное наращивание волос с идеальным результатом</p>
+            <div class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+                Записаться на консультацию
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="fade-in-section">
+                <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df?auto=format&fit=crop&q=80&w=1974" alt="Профессиональное наращивание волос" loading="lazy">
+            </div>
+            <div class="fade-in-section">
+                <h2>О нас</h2>
+                <p>Мы работаем исключительно с натуральными волосами премиум-класса — славянскими и европейскими. Каждый клиент получает индивидуальный подход, безупречный подбор оттенка и текстуры, а также долговечный результат в атмосфере абсолютной конфиденциальности и роскоши.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="fade-in-section">
+        <div class="container">
+            <h2>Услуги</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">T</div>
+                    <h3>Tape-in</h3>
+                    <p>Самый лёгкий и незаметный метод. Идеален для тонких и повреждённых волос. Быстрое нанесение и комфортная носка.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">K</div>
+                    <h3>Кератин</h3>
+                    <p>Капсульное наращивание высокой прочности. Максимально естественный вид и носка до 6 месяцев без коррекции.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">C</div>
+                    <h3>Консультация + уход</h3>
+                    <p>Глубокая диагностика состояния волос, точный подбор, профессиональные рекомендации по уходу и стайлингу.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery" class="fade-in-section">
+        <div class="container">
+            <h2>Наши работы</h2>
+            <div class="gallery-grid">
+                <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80" alt="Работа 1" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1625772299848-361b803ffa25?auto=format&fit=crop&q=80" alt="Работа 2" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1600948836101-f9ffda4f8e4a?auto=format&fit=crop&q=80" alt="Работа 3" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1582093236148-1f45d4d8f2f0?auto=format&fit=crop&q=80" alt="Работа 4" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1591370871779-8b446a82e7db?auto=format&fit=crop&q=80" alt="Работа 5" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1616594039964-ae1d169d13b4?auto=format&fit=crop&q=80" alt="Работа 6" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <section id="why-us" class="fade-in-section">
+        <div class="container">
+            <h2>Почему выбирают нас</h2>
+            <div class="why-grid">
+                <div class="why-block">
+                    <div class="why-icon">100%</div>
+                    <h3>Натуральные волосы</h3>
+                    <p>Только премиальные славянские и европейские волосы высшего качества</p>
+                </div>
+                <div class="why-block">
+                    <div class="why-icon">✗</div>
+                    <h3>Невидимые крепления</h3>
+                    <p>Максимально естественный результат даже при собранных причёсках</p>
+                </div>
+                <div class="why-block">
+                    <div class="why-icon">6+</div>
+                    <h3>Долговечность</h3>
+                    <p>Носка от 4 до 8 месяцев при правильном уходе</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="fade-in-section">
+        <div class="container">
+            <h2>Оставьте заявку</h2>
+            <form>
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Телефон" required>
+                <textarea rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
+                <button type="submit">Отправить заявку</button>
+            </form>
+
+            <div class="contacts">
+                <p>Телефон: +31 6 123 45 678</p>
+                <p>Instagram: <a href="#">@luxhair.amsterdam</a></p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Luxury Hair Extensions Amsterdam</p>
+    </footer>
+
+    <script>
+        // Появление секций при скролле
+        const fadeSections = document.querySelectorAll('.fade-in-section');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: "0px 0px -100px 0px"
+        });
+
+        fadeSections.forEach(section => observer.observe(section));
+
+        // Hero при загрузке
+        window.addEventListener('load', () => {
+            document.querySelector('.hero-content').classList.add('is-visible');
+        });
+    </script>
+
+</body>
+</html>
