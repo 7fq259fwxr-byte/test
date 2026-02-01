@@ -248,7 +248,7 @@
             gap: 24px;
         }
 
-        input, textarea {
+        input, textarea, select {
             padding: 18px 24px;
             background: #1a1a1a;
             border: 1px solid #333;
@@ -259,7 +259,7 @@
             transition: all 0.4s;
         }
 
-        input:focus, textarea:focus {
+        input:focus, textarea:focus, select:focus {
             outline: none;
             border-color: #C9A227;
             box-shadow: 0 0 0 4px rgba(201,162,39,0.18);
@@ -352,6 +352,13 @@
         @media (max-width: 640px) {
             #hero h1 { font-size: 2.8rem; }
             #hero p  { font-size: 1.3rem; }
+            .phone-wrapper {
+                flex-direction: column;
+                gap: 16px;
+            }
+            #country-code {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -444,7 +451,23 @@
             <h2>Оставьте заявку</h2>
             <form id="contact-form" action="https://formsubmit.co/nikitulkaah@gmail.com" method="POST">
                 <input type="text" name="Имя" placeholder="Ваше имя" required>
-                <input type="tel" name="Телефон" placeholder="Телефон" required>
+
+                <div class="phone-wrapper" style="display: flex; gap: 12px; align-items: stretch;">
+                    <select id="country-code" name="Код_страны" required>
+                        <option value="+7" selected>Россия +7</option>
+                        <option value="+375">Беларусь +375</option>
+                    </select>
+
+                    <input 
+                        type="tel" 
+                        id="phone" 
+                        name="Телефон" 
+                        placeholder="+7 (___) ___-__-__" 
+                        required 
+                        style="flex: 1;"
+                    >
+                </div>
+
                 <textarea name="Сообщение" rows="5" placeholder="Когда вам удобно прийти? Желаемый объём, длина, оттенок?" required></textarea>
 
                 <input type="hidden" name="_subject" value="Новая заявка с сайта Luxury Hair Extensions">
@@ -479,16 +502,67 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, {
-            threshold: 0.12,
-            rootMargin: "0px 0px -100px 0px"
-        });
+        }, { threshold: 0.12, rootMargin: "0px 0px -100px 0px" });
 
         fadeSections.forEach(section => observer.observe(section));
 
         window.addEventListener('load', () => {
             document.querySelector('.hero-content').classList.add('is-visible');
         });
+
+        // Маска телефона
+        const countrySelect = document.getElementById('country-code');
+        const phoneInput = document.getElementById('phone');
+
+        const masks = {
+            '+7': '+7 (___) ___-__-__',
+            '+375': '+375 (__) ___-__-__'
+        };
+
+        const placeholders = {
+            '+7': '+7 (___) ___-__-__',
+            '+375': '+375 (__) ___-__-__'
+        };
+
+        let currentMask = masks['+7'];
+        let currentPlaceholder = placeholders['+7'];
+
+        function applyMask(input, mask) {
+            let value = input.value.replace(/\D/g, ''); // только цифры
+            let pos = 0;
+            let formatted = '';
+
+            for (let char of mask) {
+                if (char === '_' && pos < value.length) {
+                    formatted += value[pos++];
+                } else if (char !== '_') {
+                    formatted += char;
+                }
+            }
+
+            input.value = formatted;
+        }
+
+        phoneInput.addEventListener('input', function() {
+            applyMask(this, currentMask);
+        });
+
+        countrySelect.addEventListener('change', function() {
+            const code = this.value;
+            currentMask = masks[code];
+            currentPlaceholder = placeholders[code];
+
+            phoneInput.placeholder = currentPlaceholder;
+
+            // Сохраняем только цифры из предыдущего значения и добавляем новый код
+            let digits = phoneInput.value.replace(/\D/g, '');
+            phoneInput.value = code + ' ';
+            applyMask(phoneInput, currentMask);
+        });
+
+        // Инициализация
+        phoneInput.value = '+7 ';
+        phoneInput.placeholder = currentPlaceholder;
 
         // AJAX отправка формы
         const form = document.getElementById('contact-form');
@@ -501,7 +575,6 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Отправка...';
 
-            // Сбрасываем предыдущее состояние
             messageBox.className = '';
             messageBox.textContent = '';
 
@@ -525,20 +598,16 @@
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Отправить заявку';
 
-                // Показываем сообщение (если оно появилось)
                 if (messageBox.textContent) {
                     messageBox.classList.add('show');
 
-                    // Убираем через 5 секунд
                     setTimeout(() => {
                         messageBox.classList.remove('show');
-
-                        // Полностью очищаем текст после завершения анимации
                         setTimeout(() => {
                             messageBox.textContent = '';
                             messageBox.className = '';
-                        }, 700); // чуть больше длительности transition
-                    }, 3000);
+                        }, 700);
+                    }, 5000);
                 }
             }
         });
