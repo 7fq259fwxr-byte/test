@@ -168,8 +168,15 @@
             height: 400px;
         }
 
+        .ba-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
+
         .ba-card::before {
-            content: 'До';
+            content: 'До / После';
             position: absolute;
             top: 10px;
             left: 10px;
@@ -180,34 +187,8 @@
             z-index: 2;
         }
 
-        .ba-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: opacity 0.3s;
-        }
-
-        .ba-card .after {
-            position: absolute;
-            top: 0;
-            left: 0;
-            opacity: 0;
-        }
-
-        .ba-card .after::before {
-            content: 'После';
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.6);
-            color: #fff;
-            padding: 4px 8px;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
-        .ba-card:hover .after {
-            opacity: 1;
+        .ba-card:hover img {
+            opacity: 0.8;
         }
 
         /* Services */
@@ -230,7 +211,6 @@
             transform: translateY(-16px);
             border-color: #C9A227;
             box-shadow: 0 30px 80px rgba(201,162,39,0.15);
-            background: linear-gradient(to bottom, #1a1a1a, rgba(201,162,39,0.1));
         }
 
         .service-icon {
@@ -440,36 +420,6 @@
             color: #C9A227;
         }
 
-        /* Floating WhatsApp */
-        .floating-whatsapp {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            background: #C9A227;
-            color: #0f0f0f;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            box-shadow: 0 8px 20px rgba(201,162,39,0.3);
-            transition: all 0.3s;
-            z-index: 1000;
-            opacity: 0;
-        }
-
-        .floating-whatsapp.show {
-            opacity: 1;
-        }
-
-        .floating-whatsapp:hover {
-            transform: scale(1.1);
-            background: #000;
-            color: #C9A227;
-        }
-
         /* Footer */
         footer {
             padding: 80px 0 40px;
@@ -480,14 +430,18 @@
             border-top: 1px solid #222;
         }
 
-        footer a {
+        footer .social-icons {
+            margin-top: 20px;
+        }
+
+        footer .social-icons a {
+            margin: 0 16px;
+            font-size: 2rem;
             color: #C9A227;
-            margin: 0 12px;
-            font-size: 1.5rem;
             transition: color 0.3s;
         }
 
-        footer a:hover {
+        footer .social-icons a:hover {
             color: #fff;
         }
 
@@ -503,7 +457,6 @@
             #country-code { width: 100%; }
             .ba-grid { gap: 40px; }
             .ba-card { height: auto; }
-            .floating-whatsapp { bottom: 20px; right: 20px; width: 50px; height: 50px; font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -534,7 +487,7 @@
     <section id="gallery" class="fade-in-section">
         <div class="container">
             <h2>Наши работы</h2>
-            <div class="gallery-grid" style="grid-template-columns: masonry; grid-template-rows: masonry;">
+            <div class="gallery-grid">
                 <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&q=80" alt="Работа 1" loading="lazy">
                 <img src="https://images.unsplash.com/photo-1625772299848-361b803ffa25?auto=format&fit=crop&q=80" alt="Работа 2" loading="lazy">
                 <img src="https://images.unsplash.com/photo-1600948836101-f9ffda4f8e4a?auto=format&fit=crop&q=80" alt="Работа 3" loading="lazy">
@@ -550,16 +503,13 @@
             <h2>До / После</h2>
             <div class="ba-grid">
                 <div class="ba-card">
-                    <img class="before" src="https://images.pexels.com/photos/161477/pexels-photo-161477.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="До 1" loading="lazy">
-                    <img class="after" src="https://images.pexels.com/photos/161476/pexels-photo-161476.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="После 1" loading="lazy">
+                    <img src="https://lawa.salon/wp-content/uploads/2023/04/hot-fusionn-hair-extensions-lawa-salon-before-after-1-resized.webp" alt="До / После 1" loading="lazy">
                 </div>
                 <div class="ba-card">
-                    <img class="before" src="https://images.pexels.com/photos/161478/pexels-photo-161478.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="До 2" loading="lazy">
-                    <img class="after" src="https://images.pexels.com/photos/161479/pexels-photo-161479.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="После 2" loading="lazy">
+                    <img src="https://lawa.salon/wp-content/uploads/2023/04/hot-fusionn-hair-extensions-lawa-salon-before-after-2.webp" alt="До / После 2" loading="lazy">
                 </div>
                 <div class="ba-card">
-                    <img class="before" src="https://images.pexels.com/photos/161480/pexels-photo-161480.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="До 3" loading="lazy">
-                    <img class="after" src="https://images.pexels.com/photos/161481/pexels-photo-161481.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="После 3" loading="lazy">
+                    <img src="https://www.ranahair.com/wp-content/uploads/2023/11/hairextension-before-after.jpg" alt="До / После 3" loading="lazy">
                 </div>
             </div>
         </div>
@@ -662,11 +612,6 @@
                 <input type="hidden" name="_captcha" value="false">
                 <input type="text" name="_gotcha" style="display:none !important">
 
-                <label style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: #ccc;">
-                    <input type="checkbox" required style="width: 20px; height: 20px;">
-                    Согласие на обработку персональных данных
-                </label>
-
                 <button type="submit" id="submit-btn">Отправить заявку</button>
             </form>
 
@@ -679,14 +624,12 @@
         </div>
     </section>
 
-    <a href="https://wa.me/1234567890" class="floating-whatsapp" title="Написать в WhatsApp">WA</a>
-
     <footer>
         <p>© 2026 Luxury Hair Extensions Amsterdam</p>
-        <div>
-            <a href="https://wa.me/1234567890" title="WhatsApp">WA</a>
-            <a href="https://t.me/username" title="Telegram">TG</a>
-            <a href="https://instagram.com/luxhair.amsterdam" title="Instagram">IG</a>
+        <div class="social-icons">
+            <a href="https://wa.me/1234567890" title="WhatsApp">💬</a>
+            <a href="https://t.me/username" title="Telegram">✈️</a>
+            <a href="https://instagram.com/luxhair.amsterdam" title="Instagram">📷</a>
         </div>
     </footer>
 
@@ -829,16 +772,6 @@
                         }, 700);
                     }, 5000);
                 }
-            }
-        });
-
-        // Floating WhatsApp
-        const whatsappBtn = document.querySelector('.floating-whatsapp');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                whatsappBtn.classList.add('show');
-            } else {
-                whatsappBtn.classList.remove('show');
             }
         });
     </script>
